@@ -1,196 +1,157 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rana Bhai's Pro Scientific Calculator</title>
+    <title>রক্তদাতা ও জরুরি তথ্য নিবন্ধন ফর্ম</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background-color: #1a1a2e; margin: 0; padding: 20px; }
-        .calculator { background-color: #16213e; padding: 20px; border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); width: 360px; }
-        
-        #display { width: 100%; height: 65px; font-size: 28px; text-align: right; margin-bottom: 5px; padding: 15px; border: none; border-radius: 12px; background: #e94560; color: white; box-sizing: border-box; font-weight: bold; }
-        #realTimeResult { width: 100%; height: 25px; font-size: 18px; text-align: right; color: #0f3460; margin-bottom: 15px; font-weight: bold; padding-right: 15px; background: #95adbe; border-radius: 5px; display: flex; align-items: center; justify-content: flex-end; }
-
-        .buttons { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-        
-        button { padding: 15px 5px; font-size: 16px; border: none; border-radius: 10px; cursor: pointer; transition: 0.2s; background-color: #0f3460; color: white; font-weight: 600; }
-        button:hover { background-color: #533483; transform: translateY(-2px); }
-        
-        .operator { background-color: #e94560; }
-        .sci-btn { background-color: #0077b6; font-size: 14px; }
-        .equal { background-color: #27ae60; grid-column: span 2; }
-        .clear { background-color: #d63031; }
-        .del { background-color: #f39c12; }
-
-        .history-container { width: 360px; margin-top: 20px; background: #f1f2f6; border-radius: 15px; padding: 15px; box-sizing: border-box; }
-        .history-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ddd; padding-bottom: 8px; margin-bottom: 10px; }
-        .history-header h3 { margin: 0; font-size: 18px; color: #2c3e50; }
-        .clear-history-btn { background: #d63031; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
-        #historyList { max-height: 180px; overflow-y: auto; }
-        .history-item { font-size: 14px; color: #333; padding: 8px 0; border-bottom: 1px solid #ccc; }
+        body { font-family: 'SolaimanLipi', Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 600px; background: #fff; margin: 0 auto; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #d9534f; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #666; margin-bottom: 12px; font-size: 14px; }
+        .hotline-box { text-align: center; margin-bottom: 25px; }
+        .hotline-badge { display: inline-block; background-color: #fdf2f2; color: #d9534f; border: 1px solid #f5c6cb; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 15px; text-decoration: none; }
+        .hotline-badge:hover { background-color: #d9534f; color: #fff; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
+        button { background-color: #d9534f; color: white; border: none; padding: 12px 20px; font-size: 18px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; }
+        button:hover { background-color: #c9302c; }
     </style>
 </head>
 <body>
 
-<div class="calculator">
-    <input type="text" id="display" placeholder="0" disabled>
-    <div id="realTimeResult"></div>
+<div class="container">
+    <h2>রক্তদাতা ও জরুরি তথ্য নিবন্ধন ফর্ম</h2>
+    <p class="subtitle">জরুরি প্রয়োজনে রক্তদাতা খুঁজে পেতে আপনার সঠিক তথ্য দিয়ে সহযোগিতা করুন।</p>
     
-    <div class="buttons">
-        <button class="sci-btn" onclick="sciCalc('sin')">sin</button>
-        <button class="sci-btn" onclick="sciCalc('cos')">cos</button>
-        <button class="sci-btn" onclick="sciCalc('tan')">tan</button>
-        <button class="sci-btn" onclick="sciCalc('log')">log</button>
-        <button class="sci-btn" onclick="sciCalc('sqrt')">√</button>
-
-        <button class="clear" onclick="clearDisplay()">AC</button>
-        <button class="del" onclick="deleteLast()">DEL</button>
-        <button class="operator" onclick="addToDisplay('%')">%</button>
-        <button class="operator" onclick="addToDisplay('/')">÷</button>
-        <button class="sci-btn" onclick="sciCalc('pow')">x²</button>
-
-        <button onclick="addToDisplay('7')">7</button>
-        <button onclick="addToDisplay('8')">8</button>
-        <button onclick="addToDisplay('9')">9</button>
-        <button class="operator" onclick="addToDisplay('*')">×</button>
-        <button class="sci-btn" onclick="sciCalc('pi')">π</button>
-
-        <button onclick="addToDisplay('4')">4</button>
-        <button onclick="addToDisplay('5')">5</button>
-        <button onclick="addToDisplay('6')">6</button>
-        <button class="operator" onclick="addToDisplay('-')">−</button>
-        <button class="sci-btn" onclick="addToDisplay('(')">(</button>
-
-        <button onclick="addToDisplay('1')">1</button>
-        <button onclick="addToDisplay('2')">2</button>
-        <button onclick="addToDisplay('3')">3</button>
-        <button class="operator" onclick="addToDisplay('+')">+</button>
-        <button class="sci-btn" onclick="addToDisplay(')')">)</button>
-
-        <button onclick="addToDisplay('0')">0</button>
-        <button onclick="addToDisplay('.')">.</button>
-        <button class="equal" onclick="finalCalculate()">=</button>
+    <div class="hotline-box">
+        <a href="tel:01980292561" class="hotline-badge">📞 জরুরি হটলাইন: ০১৯৮০-২৯২৫৬১</a>
     </div>
+    
+    <form id="donorForm">
+        <div class="form-group">
+            <label>নাম *</label>
+            <input type="text" name="name" required placeholder="আপনার পুরো নাম লিখুন">
+        </div>
+
+        <div class="form-group">
+            <label>রক্তের গ্রুপ *</label>
+            <select name="bloodGroup" required>
+                <option value="">রক্তের গ্রুপ নির্বাচন করুন</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>মোবাইল নম্বর *</label>
+            <input type="tel" name="phone" required placeholder="আপনার মোবাইল নম্বর">
+        </div>
+
+        <div class="form-group">
+            <label>বয়স *</label>
+            <input type="number" name="age" required placeholder="আপনার বয়স">
+        </div>
+
+        <div class="form-group">
+            <label>জেলা (Searchable) *</label>
+            <input type="text" name="district" required placeholder="জেলা টাইপ করুন (যেমন: ঢাকা)" list="districtList">
+            <datalist id="districtList">
+                <option value="ঢাকা (Dhaka)">
+                <option value="ফরিদপুর (Faridpur)">
+                <option value="গাজীপুর (Gazipur)">
+                <option value="গোপালগঞ্জ (Gopalganj)">
+                <option value="কিশোরগঞ্জ (Kishoreganj)">
+                <option value="মাদারীপুর (Madaripur)">
+                <option value="মানিকগঞ্জ (Manikganj)">
+                <option value="মুন্সীগঞ্জ (Munshiganj)">
+                <option value="নারায়ণগঞ্জ (Narayanganj)">
+                <option value="নরসিংদী (Narsingdi)">
+                <option value="রাজবাড়ী (Rajbari)">
+                <option value="শরীয়তপুর (Shariatpur)">
+                <option value="টাঙ্গাইল (Tangail)">
+                <option value="বাগেরহাট (Bagerhat)">
+                <option value="চুয়াডাঙ্গা (Chuadanga)">
+                <option value="যশোর (Jashore)">
+                <option value="ঝিনাইদহ (Jhenaidah)">
+                <option value="খুলনা (Khulna)">
+                <option value="কুষ্টিয়া (Kushtia)">
+                <option value="মাগুরা (Magura)">
+                <option value="মেহেরপুর (Meherpur)">
+                <option value="নড়াইল (Narail)">
+                <option value="সাতক্ষীরা (Satkhira)">
+                <option value="বগুড়া (Bogura)">
+                <option value="জয়পুরহাট (Joypurhat)">
+                <option value="নওগাঁ (Naogaon)">
+                <option value="নাটোর (Natore)">
+                <option value="চাঁপাইনবাবগঞ্জ (Chapainawabganj)">
+                <option value="পাবনা (Pabna)">
+                <option value="রাজশাহী (Rajshahi)">
+                <option value="সিরাজগঞ্জ (Sirajganj)">
+                <option value="দিনাজপুর (Dinajpur)">
+                <option value="গাইবান্ধা (Gaibandha)">
+                <option value="কুড়িগ্রাম (Kurigram)">
+                <option value="লালমনিরহাট (Lalmonirhat)">
+                <option value="নীলফামারী (Nilphamari)">
+                <option value="পঞ্চগড় (Panchagarh)">
+                <option value="রংপুর (Rangpur)">
+                <option value="ঠাকুরগাঁও (Thakurgaon)">
+                <option value="বরগুনা (Barguna)">
+                <option value="বরিশাল (Barishal)">
+                <option value="ভোলা (Bhola)">
+                <option value="ঝালকাঠি (Jhalokati)">
+                <option value="পটুয়াখালী (Patuakhali)">
+                <option value="পিরোজপুর (Pirojpur)">
+                <option value="বান্দরবান (Bandarban)">
+                <option value="ব্রাহ্মণবাড়িয়া (Brahmanbaria)">
+                <option value="চাঁদপুর (Chandpur)">
+                <option value="চট্টগ্রাম (Chattogram)">
+                <option value="কুমিল্লা (Cumilla)">
+                <option value="কক্সবাজার (Cox's Bazar)">
+                <option value="ফেনী (Feni)">
+                <option value="খাগড়াছড়ি (Khagrachhari)">
+                <option value="লক্ষ্মীপুর (Lakshmipur)">
+                <option value="নোয়াখালী (Noakhali)">
+                <option value="রাঙ্গামাটি (Rangamati)">
+                <option value="হবিগঞ্জ (Habiganj)">
+                <option value="মৌলভীবাজার (Moulvibazar)">
+                <option value="সুনামগঞ্জ (Sunamganj)">
+                <option value="সিলেট (Sylhet)">
+                <option value="জামালপুর (Jamalpur)">
+                <option value="ময়মনসিংহ (Mymensingh)">
+                <option value="নেত্রকোণা (Netrokona)">
+                <option value="শেরপুর (Sherpur)">
+            </datalist>
+        </div>
+
+        <div class="form-group">
+            <label>ইউনিয়ন / এলাকা</label>
+            <input type="text" name="union" placeholder="আপনার ইউনিয়ন বা এলাকার নাম">
+        </div>
+
+        <div class="form-group">
+            <label>আপনি কি নিয়মিত রক্তদাতা?</label>
+            <select name="regularDonor">
+                <option value="হ্যাঁ">হ্যাঁ</option>
+                <option value="না">না</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>সর্বশেষ কত দিন আগে এবং কতবার রক্তদান করেছেন? (ঐচ্ছিক)</label>
+            <input type="text" name="donationHistory" placeholder="যেমন: ৩ মাস আগে, ২ বার">
+        </div>
+
+        <button type="submit">নিবন্ধন করুন</button>
+    </form>
 </div>
-
-<div class="history-container">
-    <div class="history-header">
-        <h3>History Archive</h3>
-        <button class="clear-history-btn" onclick="clearHistory()">Clear</button>
-    </div>
-    <div id="historyList"></div>
-</div>
-
-<script>
-    let display = document.getElementById('display');
-    let realTimeResult = document.getElementById('realTimeResult');
-    let historyList = document.getElementById('historyList');
-
-    window.onload = function() {
-        let savedHistory = JSON.parse(localStorage.getItem('calcHistory')) || [];
-        savedHistory.forEach(item => renderHistoryItem(item));
-    };
-
-    function addToDisplay(value) {
-        display.value += value;
-        updateRealTime();
-    }
-
-    function clearDisplay() {
-        display.value = '';
-        realTimeResult.innerText = '';
-    }
-
-    function deleteLast() {
-        display.value = display.value.slice(0, -1);
-        updateRealTime();
-    }
-
-    // সায়েন্টিফিক ফাংশনাল লজিক
-    function sciCalc(type) {
-        if (display.value === "" && type !== 'pi') return;
-        
-        let val = parseFloat(display.value);
-        let res = 0;
-        
-        switch(type) {
-            case 'sin': res = Math.sin(val * Math.PI / 180); break; // Degrees
-            case 'cos': res = Math.cos(val * Math.PI / 180); break;
-            case 'tan': res = Math.tan(val * Math.PI / 180); break;
-            case 'log': res = Math.log10(val); break;
-            case 'sqrt': res = Math.sqrt(val); break;
-            case 'pow': res = Math.pow(val, 2); break;
-            case 'pi': addToDisplay(Math.PI.toFixed(4)); return;
-        }
-        display.value = res;
-        updateRealTime();
-    }
-
-    // আপনার কাস্টম পার্সেন্টেজ লজিক
-    function parseExpression(expr) {
-        if (expr.includes('%')) {
-            let parts = expr.split('%');
-            if (parts.length === 2 && parts[1] !== "") {
-                return "(" + parts[0] + "*" + parts[1] + ")/100";
-            }
-        }
-        return expr;
-    }
-
-    function updateRealTime() {
-        try {
-            let expression = display.value;
-            if (expression === "" || expression.endsWith('%')) {
-                realTimeResult.innerText = "";
-                return;
-            }
-            let result = eval(parseExpression(expression));
-            if (result !== undefined) {
-                realTimeResult.innerText = "= " + result;
-            }
-        } catch (e) {
-            realTimeResult.innerText = "";
-        }
-    }
-
-    function finalCalculate() {
-        try {
-            let expression = display.value;
-            if (expression === "") return;
-            
-            let result = eval(parseExpression(expression));
-            let historyData = expression + " = " + result;
-            
-            saveToLocalStorage(historyData);
-            renderHistoryItem(historyData, true);
-
-            display.value = result;
-            realTimeResult.innerText = "";
-        } catch (error) {
-            display.value = "Error";
-        }
-    }
-
-    function renderHistoryItem(data, isNew = false) {
-        let newItem = document.createElement('div');
-        newItem.className = 'history-item';
-        let parts = data.split('=');
-        newItem.innerHTML = parts[0] + " = <b>" + parts[1] + "</b>";
-        if (isNew) historyList.prepend(newItem);
-        else historyList.appendChild(newItem);
-    }
-
-    function saveToLocalStorage(data) {
-        let savedHistory = JSON.parse(localStorage.getItem('calcHistory')) || [];
-        savedHistory.unshift(data); 
-        localStorage.setItem('calcHistory', JSON.stringify(savedHistory));
-    }
-
-    function clearHistory() {
-        localStorage.removeItem('calcHistory');
-        historyList.innerHTML = "";
-    }
-</script>
 
 </body>
 </html>
